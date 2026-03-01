@@ -12,22 +12,25 @@ jobs:
 
     steps:
     - name: Checkout Code
-      uses: actions/checkout@v4  # <-- UPDATED TO v4
+      uses: actions/checkout@v4
 
     - name: Build vHIL Docker Container
       run: docker build -t surgical-robot-vhil .
 
+    - name: Create Reports Directory on GitHub Host
+      run: mkdir -p reports
+
     - name: Run Sanity Check (Safety-Critical)
       run: |
-        docker run -e SCENARIO=critical surgical-robot-vhil  # <-- CHANGED 'sanity' to 'critical'
+        docker run -v ${{ github.workspace }}/reports:/app/reports -e SCENARIO=critical surgical-robot-vhil
 
     - name: Run Sensor Validation Scenario
       run: |
-        docker run -e SCENARIO=sensor surgical-robot-vhil
+        docker run -v ${{ github.workspace }}/reports:/app/reports -e SCENARIO=sensor surgical-robot-vhil
 
     - name: Upload Test Evidence (JUnit)
       if: always()
-      uses: actions/upload-artifact@v4  # <-- UPDATED TO v4
+      uses: actions/upload-artifact@v4
       with:
         name: vHIL-Test-Reports
         path: reports/
