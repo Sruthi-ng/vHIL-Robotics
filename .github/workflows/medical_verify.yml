@@ -1,0 +1,33 @@
+name: Surgical Robotics vHIL Verification
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  verify-robotics-logic:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Build vHIL Docker Container
+      run: docker build -t surgical-robot-vhil .
+
+    - name: Run Sanity Check (Safety-Critical)
+      run: |
+        docker run -e SCENARIO=sanity surgical-robot-vhil
+
+    - name: Run Sensor Validation Scenario
+      run: |
+        docker run -e SCENARIO=sensor surgical-robot-vhil
+
+    - name: Upload Test Evidence (JUnit)
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: vHIL-Test-Reports
+        path: reports/ # Ensure your run_tests.py saves XMLs here
