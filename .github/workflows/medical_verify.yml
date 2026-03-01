@@ -12,14 +12,14 @@ jobs:
 
     steps:
     - name: Checkout Code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4  # <-- UPDATED TO v4
 
     - name: Build vHIL Docker Container
       run: docker build -t surgical-robot-vhil .
 
     - name: Run Sanity Check (Safety-Critical)
       run: |
-        docker run -e SCENARIO=sanity surgical-robot-vhil
+        docker run -e SCENARIO=critical surgical-robot-vhil  # <-- CHANGED 'sanity' to 'critical'
 
     - name: Run Sensor Validation Scenario
       run: |
@@ -27,7 +27,7 @@ jobs:
 
     - name: Upload Test Evidence (JUnit)
       if: always()
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4  # <-- UPDATED TO v4
       with:
         name: vHIL-Test-Reports
-        path: reports/ # Ensure your run_tests.py saves XMLs here
+        path: reports/

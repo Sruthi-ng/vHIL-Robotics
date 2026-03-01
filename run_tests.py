@@ -9,7 +9,8 @@ def main():
     
     args = parser.parse_args()
     
-    cmd = [sys.executable, "-m", "pytest"]
+    # Update this line to generate the JUnit XML required by GitHub Actions
+    cmd = [sys.executable, "-m", "pytest", "--junitxml=reports/test_results.xml"]
     
     if args.scenario:
         print(f"Running scenario marked with: {args.scenario}")
