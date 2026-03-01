@@ -1,4 +1,4 @@
-# Orchestrated vHIL Framework for Surgical Robotics
+# Orchestrated vHIL Framework for Surgical Robotics.
 
 ## Overview
 This is a Virtual Hardware-in-the-Loop (vHIL) framework for surgical robotics. It supports modular test suites for isolated and integrated checking. Components like CAN network signals and hardware sensors are mocked using Python's `unittest.mock`. 
